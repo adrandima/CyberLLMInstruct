@@ -116,6 +116,24 @@ class CyberDataCollector:
         self.session.headers.update({
             'User-Agent': 'CyberLLMInstruct-DataCollector/1.0'
         })
+        
+        # Validate critical endpoints
+        self._validate_endpoints()
+
+    def _validate_endpoints(self) -> None:
+        """
+        Validate that critical endpoints are properly configured.
+        Logs warnings for missing or invalid endpoints.
+        """
+        critical_endpoints = ['opencve', 'nvd_cve', 'mitre_attack']
+        
+        for endpoint in critical_endpoints:
+            if endpoint not in self.endpoints:
+                logger.warning(f"Critical endpoint '{endpoint}' not found in endpoints dictionary")
+            elif not self.endpoints[endpoint]:
+                logger.warning(f"Critical endpoint '{endpoint}' is empty or None")
+            else:
+                logger.debug(f"Endpoint '{endpoint}' validated: {self.endpoints[endpoint]}")
 
     def _check_rate_limit(self, endpoint: str) -> None:
         """
@@ -223,6 +241,16 @@ class CyberDataCollector:
         Note: Authentication removed as per refactoring requirements.
         """
         try:
+            # Check if opencve endpoint is configured
+            if 'opencve' not in self.endpoints:
+                logger.error("OpenCVE endpoint not configured in endpoints dictionary")
+                return None
+            
+            opencve_url = self.endpoints.get('opencve')
+            if not opencve_url:
+                logger.error("OpenCVE endpoint URL is empty or None")
+                return None
+            
             all_cves = []
             page = 1
             
@@ -231,7 +259,7 @@ class CyberDataCollector:
                 params = {
                     'page': page
                 }
-                response = self._make_request('opencve', self.endpoints['opencve'], params=params)
+                response = self._make_request('opencve', opencve_url, params=params)
                 
                 if not response:
                     break
@@ -260,7 +288,7 @@ class CyberDataCollector:
             for cve in all_cves[:10]:  # Limit detailed lookups to avoid rate limiting
                 cve_id = cve.get('cve_id')
                 if cve_id:
-                    detailed_url = f"{self.endpoints['opencve']}/{cve_id}"
+                    detailed_url = f"{opencve_url}/{cve_id}"
                     detailed_response = self._make_request('opencve', detailed_url)
                     
                     if detailed_response:
