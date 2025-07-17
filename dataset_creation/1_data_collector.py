@@ -87,60 +87,60 @@ class CyberDataCollector:
         self.endpoints = {
             # NIST and CVE Sources
             'nvd_cve': 'https://services.nvd.nist.gov/rest/json/cves/2.0',
-            'opencve': 'https://app.opencve.io/api/cve',
-            'nist_standards': 'https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-53r5.json',
+            # 'opencve': 'https://app.opencve.io/api/cve',
+            # 'nist_standards': 'https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-53r5.json',
             'mitre_attack': 'https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json',
             'mitre_capec': 'https://capec.mitre.org/data/xml/views/3000.xml',
             
             # Threat Intelligence Feeds
-            'alienvault_otx': 'https://otx.alienvault.com/api/v1/pulses/subscribed',
-            'threatfox_api': 'https://threatfox-api.abuse.ch/api/v1/',
+            # 'alienvault_otx': 'https://otx.alienvault.com/api/v1/pulses/subscribed',
+            # 'threatfox_api': 'https://threatfox-api.abuse.ch/api/v1/',
             
             # Security Advisories
             'microsoft_security': 'https://api.msrc.microsoft.com/cvrf/v2.0/updates',
             'ubuntu_usn': 'https://ubuntu.com/security/notices/rss.xml',
-            'redhat_security': 'https://access.redhat.com/labs/securitydataapi/cve.json',
+            #'redhat_security': 'https://access.redhat.com/labs/securitydataapi/cve.json',
             
             # Research and Reports
             'arxiv_cs_crypto': 'http://export.arxiv.org/api/query?search_query=cat:cs.CR&max_results=100',
-            'exploit_db': 'https://www.exploit-db.com/download/',
+            #'exploit_db': 'https://www.exploit-db.com/download/',
             
             # Malware Information
-            'malware_bazaar': 'https://bazaar.abuse.ch/api/v1/',
-            'virustotal': 'https://www.virustotal.com/vtapi/v2/',
-            'malpedia': 'https://malpedia.caad.fkie.fraunhofer.de/api/v1/',
-            'malshare': 'https://malshare.com/api.php',
-            'thezoo': 'https://github.com/ytisf/theZoo/raw/master/malware.yml',
-            'vxug': 'https://vx-underground.org/samples.html',
+            #'malware_bazaar': 'https://bazaar.abuse.ch/api/v1/',
+            #'virustotal': 'https://www.virustotal.com/vtapi/v2/',
+            #'malpedia': 'https://malpedia.caad.fkie.fraunhofer.de/api/v1/',
+            #'malshare': 'https://malshare.com/api.php',
+            #'thezoo': 'https://github.com/ytisf/theZoo/raw/master/malware.yml',
+            #'vxug': 'https://vx-underground.org/samples.html',
             
             # CTF Resources
             'ctftime': 'https://ctftime.org/api/v1/events/',
-            'root_me': 'https://api.www.root-me.org/challenges',
-            'hackthebox': 'https://www.hackthebox.com/api/v4/challenge/list',
+            #'root_me': 'https://api.www.root-me.org/challenges',
+            #'hackthebox': 'https://www.hackthebox.com/api/v4/challenge/list',
             
             # Security Testing Resources
-            'metasploit_modules': 'https://raw.githubusercontent.com/rapid7/metasploit-framework/master/modules/',
-            'pentesterlab': 'https://pentesterlab.com/exercises/api/v1/',
-            'vulnhub': 'https://www.vulnhub.com/api/v1/entries/',
-            'offensive_security': 'https://offsec.tools/api/tools',
-            'securitytube': 'https://www.securitytube.net/api/v1/videos',
+            #'metasploit_modules': 'https://raw.githubusercontent.com/rapid7/metasploit-framework/master/modules/',
+            #'pentesterlab': 'https://pentesterlab.com/exercises/api/v1/',
+            #'vulnhub': 'https://www.vulnhub.com/api/v1/entries/',
+           # 'offensive_security': 'https://offsec.tools/api/tools',
+            #'securitytube': 'https://www.securitytube.net/api/v1/videos',
             'pentestmonkey': 'https://github.com/pentestmonkey/php-reverse-shell/raw/master/php-reverse-shell.php',
             'payloadsallthethings': 'https://raw.githubusercontent.com/swisskyrepo/PayloadsAllTheThings/master/',
             
             # Social Engineering Resources
-            'phishtank': 'https://phishtank.org/phish_search.php?valid=y&active=all&Search=Search',
-            'openphish': 'https://openphish.com/feed.txt',
-            'social_engineer_toolkit': 'https://github.com/trustedsec/social-engineer-toolkit/raw/master/src/templates/',
-            'gophish': 'https://github.com/gophish/gophish/raw/master/templates/',
+            #'phishtank': 'https://phishtank.org/phish_search.php?valid=y&active=all&Search=Search',
+            #'openphish': 'https://openphish.com/feed.txt',
+            #'social_engineer_toolkit': 'https://github.com/trustedsec/social-engineer-toolkit/raw/master/src/templates/',
+            #'gophish': 'https://github.com/gophish/gophish/raw/master/templates/',
             
             # DoS/DDoS Resources
-            'ddosdb': 'https://ddosdb.org/api/v1/',
-            'netscout_atlas': 'https://atlas.netscout.com/api/v2/',
+            #'ddosdb': 'https://ddosdb.org/api/v1/',
+            #'netscout_atlas': 'https://atlas.netscout.com/api/v2/',
             
             # MITM & Injection Resources
-            'bettercap': 'https://raw.githubusercontent.com/bettercap/bettercap/master/modules/',
-            'sqlmap': 'https://raw.githubusercontent.com/sqlmapproject/sqlmap/master/data/',
-            'nosqlmap': 'https://raw.githubusercontent.com/codingo/NoSQLMap/master/attacks/',
+            #'bettercap': 'https://raw.githubusercontent.com/bettercap/bettercap/master/modules/',
+            #'sqlmap': 'https://raw.githubusercontent.com/sqlmapproject/sqlmap/master/data/',
+            #'nosqlmap': 'https://raw.githubusercontent.com/codingo/NoSQLMap/master/attacks/',
             
             # Zero-Day & Password Resources
             'zerodayinitiative': 'https://www.zerodayinitiative.com/rss/published/',
@@ -149,9 +149,9 @@ class CyberDataCollector:
             'hashcat': 'https://hashcat.net/hashcat/',
             
             # IoT Security Resources
-            'iot_vulndb': 'https://www.exploit-db.com/download/iot/',
-            'iot_sentinel': 'https://iotsentinel.csec.ch/api/v1/',
-            'shodan_iot': 'https://api.shodan.io/shodan/host/search?key={}&query=iot',
+            #'iot_vulndb': 'https://www.exploit-db.com/download/iot/',
+            #'iot_sentinel': 'https://iotsentinel.csec.ch/api/v1/',
+            #'shodan_iot': 'https://api.shodan.io/shodan/host/search?key={}&query=iot',
         }
         
         # Initialize session for better performance
