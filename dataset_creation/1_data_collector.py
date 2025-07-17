@@ -69,50 +69,27 @@ class CyberDataCollector:
             # NIST and CVE Sources
             'nvd_cve': 'https://services.nvd.nist.gov/rest/json/cves/2.0',
             'opencve': 'https://app.opencve.io/api/cve',
-            # 'nist_standards': 'https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-53r5.json',  # DISABLED - URL issues
+
             'mitre_attack': 'https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json',
             'mitre_capec': 'https://capec.mitre.org/data/xml/views/3000.xml',
             
             # Threat Intelligence Feeds
-            # 'alienvault_otx': 'https://otx.alienvault.com/api/v1/pulses/subscribed',  # DISABLED - API key required
+
             'threatfox_api': 'https://threatfox-api.abuse.ch/api/v1/',
             
             # Security Advisories
             'microsoft_security': 'https://api.msrc.microsoft.com/cvrf/v2.0/updates',
             'ubuntu_usn': 'https://ubuntu.com/security/notices/rss.xml',
-            #'redhat_security': 'https://access.redhat.com/labs/securitydataapi/cve.json',
+
             
             # Research and Reports
             'arxiv_cs_crypto': 'http://export.arxiv.org/api/query?search_query=cat:cs.CR&max_results=100',
             'exploit_db': 'https://www.exploit-db.com/download/',
             
-            # Malware Information - DISABLED SOURCES
-            # 'malware_bazaar': 'https://bazaar.abuse.ch/api/v1/',  # DISABLED - API issues
-            # 'virustotal': 'https://www.virustotal.com/vtapi/v2/',  # DISABLED - API key required
-            # 'malpedia': 'https://malpedia.caad.fkie.fraunhofer.de/api/v1/',  # DISABLED - API key required
-            # 'malshare': 'https://malshare.com/api.php',  # DISABLED - API key required
-            # 'thezoo': 'https://github.com/ytisf/theZoo/raw/master/malware.yml',  # DISABLED - malware data
-            # 'vxug': 'https://vx-underground.org/samples.html',  # DISABLED - malware data
-            
+
             # CTF Resources
             'ctftime': 'https://ctftime.org/api/v1/events/',
             'root_me': 'https://api.www.root-me.org/challenges',
-            # 'hackthebox': 'https://www.hackthebox.com/api/v4/challenge/list',  # DISABLED - API key required
-            
-            # Security Testing Resources - DISABLED SOURCES
-            # 'metasploit_modules': 'https://raw.githubusercontent.com/rapid7/metasploit-framework/master/modules/',  # DISABLED - URL issues
-            # 'pentesterlab': 'https://pentesterlab.com/exercises/api/v1/',  # DISABLED - URL issues
-            # 'vulnhub': 'https://www.vulnhub.com/api/v1/entries/',  # DISABLED - URL issues
-            # 'offensive_security': 'https://offsec.tools/api/tools',  # DISABLED - URL issues
-            # 'securitytube': 'https://www.securitytube.net/api/v1/videos',  # DISABLED - URL issues
-            # 'pentestmonkey': 'https://github.com/pentestmonkey/php-reverse-shell/raw/master/php-reverse-shell.php',  # DISABLED - URL issues
-            # 'payloadsallthethings': 'https://raw.githubusercontent.com/swisskyrepo/PayloadsAllTheThings/master/',  # DISABLED - URL issues
-            
-            # Social Engineering Resources - DISABLED SOURCES
-            # 'phishtank': 'https://phishtank.org/phish_search.php?valid=y&active=all&Search=Search',  # DISABLED - scraping issues
-            # 'openphish': 'https://openphish.com/feed.txt',  # DISABLED - scraping issues
-            # 'social_engineer_toolkit': 'https://github.com/trustedsec/social-engineer-toolkit/raw/master/src/templates/',  # DISABLED - scraping issues
-            # 'gophish': 'https://github.com/gophish/gophish/raw/master/templates/',  # DISABLED - scraping issues
             
             # DoS/DDoS Resources
             'ddosdb': 'https://ddosdb.org/api/v1/',
@@ -132,7 +109,6 @@ class CyberDataCollector:
             # IoT Security Resources
             'iot_vulndb': 'https://www.exploit-db.com/download/iot/',
             'iot_sentinel': 'https://iotsentinel.csec.ch/api/v1/',
-            # 'shodan_iot': 'https://api.shodan.io/shodan/host/search?key={}&query=iot',  # DISABLED - API key required
         }
         
         # Initialize session for better performance
