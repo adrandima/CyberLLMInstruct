@@ -69,6 +69,7 @@ class CyberDataCollector:
             # NIST and CVE Sources
             'nvd_cve': 'https://services.nvd.nist.gov/rest/json/cves/2.0',
 
+
             'mitre_attack': 'https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json',
             'mitre_capec': 'https://capec.mitre.org/data/xml/views/3000.xml',
             
@@ -208,6 +209,7 @@ class CyberDataCollector:
         except requests.exceptions.RequestException as e:
             logger.error(f"Error fetching CVE data: {str(e)}")
             return None
+
 
     def fetch_mitre_attack(self) -> Optional[Dict]:
         """Fetch MITRE ATT&CK framework data."""
