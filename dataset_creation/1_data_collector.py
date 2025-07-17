@@ -15,7 +15,6 @@ import yaml
 import time
 import shutil
 import argparse
-from github import Github
 
 # Configure logging
 logging.basicConfig(
@@ -28,34 +27,16 @@ class CyberDataCollector:
     def __init__(self, output_dir: str = "raw_data"):
         """Initialize the data collector with output directory configuration.
         
-        Required API Keys (set as environment variables):
-        - VIRUSTOTAL_API_KEY: Required for VirusTotal API access
-        - ALIENVAULT_API_KEY: Required for AlienVault OTX API
-        - HTB_API_KEY: Required for HackTheBox API
+        Note: API key requirements removed as per refactoring.
         
         Rate Limits:
         - CTFtime API: 30 requests per minute
         - NVD API: 5 requests per 30 seconds
-        - VirusTotal API: Depends on subscription tier
         """
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
         
-        # Initialize API clients
-        self.github_client = Github(os.getenv('GITHUB_TOKEN'))
-        self.opencve_auth = (os.getenv('OPENCVE_EMAIL'), os.getenv('OPENCVE_PASSWORD'))
-        self.nvd_api_key = os.getenv('NVD_API_KEY')
-        
-        # Load API keys from environment variables
-        self.api_keys = {
-            'virustotal': os.getenv('VIRUSTOTAL_API_KEY'),
-            'alienvault': os.getenv('ALIENVAULT_API_KEY'),
-            'hackthebox': os.getenv('HTB_API_KEY'),
-            'malpedia': os.getenv('MALPEDIA_API_KEY'),
-            'malshare': os.getenv('MALSHARE_API_KEY'),
-            'shodan': os.getenv('SHODAN_API_KEY'),
-            'phishtank': os.getenv('PHISHTANK_API_KEY'),
-        }
+        # Note: API key loading and authentication removed as per refactoring requirements
         
         # Initialize rate limiting
         self.rate_limits = {
@@ -88,12 +69,12 @@ class CyberDataCollector:
             # NIST and CVE Sources
             'nvd_cve': 'https://services.nvd.nist.gov/rest/json/cves/2.0',
             'opencve': 'https://app.opencve.io/api/cve',
-            'nist_standards': 'https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-53r5.json',
+            # 'nist_standards': 'https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-53r5.json',  # DISABLED - URL issues
             'mitre_attack': 'https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json',
             'mitre_capec': 'https://capec.mitre.org/data/xml/views/3000.xml',
             
             # Threat Intelligence Feeds
-            'alienvault_otx': 'https://otx.alienvault.com/api/v1/pulses/subscribed',
+            # 'alienvault_otx': 'https://otx.alienvault.com/api/v1/pulses/subscribed',  # DISABLED - API key required
             'threatfox_api': 'https://threatfox-api.abuse.ch/api/v1/',
             
             # Security Advisories
@@ -105,33 +86,33 @@ class CyberDataCollector:
             'arxiv_cs_crypto': 'http://export.arxiv.org/api/query?search_query=cat:cs.CR&max_results=100',
             'exploit_db': 'https://www.exploit-db.com/download/',
             
-            # Malware Information
-            'malware_bazaar': 'https://bazaar.abuse.ch/api/v1/',
-            'virustotal': 'https://www.virustotal.com/vtapi/v2/',
-            'malpedia': 'https://malpedia.caad.fkie.fraunhofer.de/api/v1/',
-            'malshare': 'https://malshare.com/api.php',
-            'thezoo': 'https://github.com/ytisf/theZoo/raw/master/malware.yml',
-            'vxug': 'https://vx-underground.org/samples.html',
+            # Malware Information - DISABLED SOURCES
+            # 'malware_bazaar': 'https://bazaar.abuse.ch/api/v1/',  # DISABLED - API issues
+            # 'virustotal': 'https://www.virustotal.com/vtapi/v2/',  # DISABLED - API key required
+            # 'malpedia': 'https://malpedia.caad.fkie.fraunhofer.de/api/v1/',  # DISABLED - API key required
+            # 'malshare': 'https://malshare.com/api.php',  # DISABLED - API key required
+            # 'thezoo': 'https://github.com/ytisf/theZoo/raw/master/malware.yml',  # DISABLED - malware data
+            # 'vxug': 'https://vx-underground.org/samples.html',  # DISABLED - malware data
             
             # CTF Resources
             'ctftime': 'https://ctftime.org/api/v1/events/',
             'root_me': 'https://api.www.root-me.org/challenges',
-            'hackthebox': 'https://www.hackthebox.com/api/v4/challenge/list',
+            # 'hackthebox': 'https://www.hackthebox.com/api/v4/challenge/list',  # DISABLED - API key required
             
-            # Security Testing Resources
-            'metasploit_modules': 'https://raw.githubusercontent.com/rapid7/metasploit-framework/master/modules/',
-            'pentesterlab': 'https://pentesterlab.com/exercises/api/v1/',
-            'vulnhub': 'https://www.vulnhub.com/api/v1/entries/',
-            'offensive_security': 'https://offsec.tools/api/tools',
-            'securitytube': 'https://www.securitytube.net/api/v1/videos',
-            'pentestmonkey': 'https://github.com/pentestmonkey/php-reverse-shell/raw/master/php-reverse-shell.php',
-            'payloadsallthethings': 'https://raw.githubusercontent.com/swisskyrepo/PayloadsAllTheThings/master/',
+            # Security Testing Resources - DISABLED SOURCES
+            # 'metasploit_modules': 'https://raw.githubusercontent.com/rapid7/metasploit-framework/master/modules/',  # DISABLED - URL issues
+            # 'pentesterlab': 'https://pentesterlab.com/exercises/api/v1/',  # DISABLED - URL issues
+            # 'vulnhub': 'https://www.vulnhub.com/api/v1/entries/',  # DISABLED - URL issues
+            # 'offensive_security': 'https://offsec.tools/api/tools',  # DISABLED - URL issues
+            # 'securitytube': 'https://www.securitytube.net/api/v1/videos',  # DISABLED - URL issues
+            # 'pentestmonkey': 'https://github.com/pentestmonkey/php-reverse-shell/raw/master/php-reverse-shell.php',  # DISABLED - URL issues
+            # 'payloadsallthethings': 'https://raw.githubusercontent.com/swisskyrepo/PayloadsAllTheThings/master/',  # DISABLED - URL issues
             
-            # Social Engineering Resources
-            'phishtank': 'https://phishtank.org/phish_search.php?valid=y&active=all&Search=Search',
-            'openphish': 'https://openphish.com/feed.txt',
-            'social_engineer_toolkit': 'https://github.com/trustedsec/social-engineer-toolkit/raw/master/src/templates/',
-            'gophish': 'https://github.com/gophish/gophish/raw/master/templates/',
+            # Social Engineering Resources - DISABLED SOURCES
+            # 'phishtank': 'https://phishtank.org/phish_search.php?valid=y&active=all&Search=Search',  # DISABLED - scraping issues
+            # 'openphish': 'https://openphish.com/feed.txt',  # DISABLED - scraping issues
+            # 'social_engineer_toolkit': 'https://github.com/trustedsec/social-engineer-toolkit/raw/master/src/templates/',  # DISABLED - scraping issues
+            # 'gophish': 'https://github.com/gophish/gophish/raw/master/templates/',  # DISABLED - scraping issues
             
             # DoS/DDoS Resources
             'ddosdb': 'https://ddosdb.org/api/v1/',
@@ -151,7 +132,7 @@ class CyberDataCollector:
             # IoT Security Resources
             'iot_vulndb': 'https://www.exploit-db.com/download/iot/',
             'iot_sentinel': 'https://iotsentinel.csec.ch/api/v1/',
-            'shodan_iot': 'https://api.shodan.io/shodan/host/search?key={}&query=iot',
+            # 'shodan_iot': 'https://api.shodan.io/shodan/host/search?key={}&query=iot',  # DISABLED - API key required
         }
         
         # Initialize session for better performance
@@ -189,18 +170,7 @@ class CyberDataCollector:
         if headers is None:
             headers = {}
         
-        # Set auth for OpenCVE
-        if endpoint == 'opencve' and not auth:
-            auth = self.opencve_auth
-            
-        # Add API keys to headers based on endpoint
-        for key, value in self.api_keys.items():
-            if endpoint.startswith(key) and value:
-                if key == 'virustotal':
-                    headers['x-apikey'] = value
-                elif key == 'alienvault':
-                    headers['X-OTX-API-KEY'] = value
-                # ... add other API key headers as needed
+        # Note: API key authentication removed as per refactoring requirements
         
         timeout = timeout or self.timeouts['default']
         retry_count = 0
@@ -271,7 +241,7 @@ class CyberDataCollector:
         Returns:
             Dictionary containing CVE data or None if failed
         
-        Note: Uses basic authentication with the provided OpenCVE credentials.
+        Note: Authentication removed as per refactoring requirements.
         """
         try:
             all_cves = []
@@ -328,15 +298,7 @@ class CyberDataCollector:
             logger.error(f"Error fetching OpenCVE data: {str(e)}")
             return None
 
-    def fetch_nist_standards(self) -> Optional[Dict]:
-        """
-        Fetch NIST cyber security standards.
-        
-        Returns:
-            Dictionary containing NIST standards or None if failed
-        """
-        logger.warning("NIST standards fetching is disabled due to URL issues")
-        return None
+    # Functions for disabled sources removed as per refactoring requirements
 
     def fetch_mitre_attack(self) -> Optional[Dict]:
         """Fetch MITRE ATT&CK framework data."""
@@ -398,19 +360,7 @@ class CyberDataCollector:
             logger.error(f"Error fetching Microsoft Security Updates: {str(e)}")
             return None
 
-    def fetch_malware_data(self) -> Optional[Dict]:
-        """
-        Fetch malware data from MalwareBazaar.
-        """
-        logger.warning("Malware data fetching is disabled due to API issues")
-        return None
-
-    def fetch_social_engineering_data(self) -> Optional[Dict]:
-        """
-        Fetch social engineering data from PhishTank.
-        """
-        logger.warning("Social engineering data fetching is disabled due to scraping issues")
-        return None
+    # fetch_malware_data, fetch_social_engineering_data, and fetch_security_testing_resources functions removed
 
     def scrape_security_articles(self, url: str) -> Optional[Dict]:
         """
@@ -538,15 +488,7 @@ class CyberDataCollector:
             logger.error(f"Error fetching CTF data: {str(e)}")
             return None
 
-    def fetch_security_testing_resources(self) -> Optional[Dict]:
-        """
-        Fetch security testing scripts and resources from educational sources.
-        
-        Note: Some endpoints may be blocked by corporate firewalls or security policies.
-        GitHub rate limits apply for raw.githubusercontent.com requests.
-        """
-        logger.warning("Security testing resources fetching is disabled due to URL issues")
-        return None
+    # fetch_security_testing_resources function removed
 
 def main():
     """Main function to process command-line arguments and run data collection."""
@@ -564,11 +506,7 @@ def main():
     - microsoft_security: Microsoft Security Updates
     - ctf_data: CTF event data and challenges
     
-    Disabled sources (known issues):
-    - nist_standards: NIST cybersecurity standards (URL issues)
-    - malware_data: Malware data from MalwareBazaar (API issues)
-    - social_engineering: Phishing data from PhishTank (scraping issues)
-    - security_testing: Security testing resources (URL issues)
+    Note: API key dependent and problematic sources have been removed.
     """
     
     parser = argparse.ArgumentParser(description=description, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -592,13 +530,7 @@ def main():
         'ctf_data': collector.fetch_ctf_data,
     }
     
-    # Disabled sources
-    disabled_sources = {
-        'nist_standards': collector.fetch_nist_standards,
-        'malware_data': collector.fetch_malware_data,
-        'social_engineering': collector.fetch_social_engineering_data,
-        'security_testing': collector.fetch_security_testing_resources,
-    }
+    # Note: Disabled sources and functions removed as per refactoring requirements
     
     # If specific sources are provided, use only those
     sources_to_fetch = {}
@@ -606,9 +538,6 @@ def main():
         for source in args.sources:
             if source in all_sources:
                 sources_to_fetch[source] = all_sources[source]
-            elif source in disabled_sources:
-                sources_to_fetch[source] = disabled_sources[source]
-                logger.warning(f"Including disabled source: {source}")
             elif source == "all":
                 sources_to_fetch = all_sources
                 break
