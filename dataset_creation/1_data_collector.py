@@ -226,7 +226,10 @@ class CyberDataCollector:
                 'resultsPerPage': results_per_page
             }
             response = self._make_request('nvd_cve', self.endpoints['nvd_cve'], params=params)
-            return response.json()
+            if response:
+                return response.json()
+            else:
+                return None
         except requests.exceptions.RequestException as e:
             logger.error(f"Error fetching CVE data: {str(e)}")
             return None
