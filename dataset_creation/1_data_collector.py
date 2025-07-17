@@ -68,7 +68,6 @@ class CyberDataCollector:
         self.endpoints = {
             # NIST and CVE Sources
             'nvd_cve': 'https://services.nvd.nist.gov/rest/json/cves/2.0',
-            'opencve': 'https://app.opencve.io/api/cve',
 
             'mitre_attack': 'https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json',
             'mitre_capec': 'https://capec.mitre.org/data/xml/views/3000.xml',
@@ -209,75 +208,6 @@ class CyberDataCollector:
         except requests.exceptions.RequestException as e:
             logger.error(f"Error fetching CVE data: {str(e)}")
             return None
-
-    def fetch_opencve_data(self, limit: int = 100) -> Optional[Dict]:
-        """
-        Fetch CVE data from the OpenCVE API.
-        
-        Args:
-            limit: Maximum number of CVEs to fetch
-            
-        Returns:
-            Dictionary containing CVE data or None if failed
-        
-        Note: Authentication removed as per refactoring requirements.
-        """
-        try:
-            all_cves = []
-            page = 1
-            
-            # Fetch pages until we reach the limit or there are no more pages
-            while len(all_cves) < limit:
-                params = {
-                    'page': page
-                }
-                response = self._make_request('opencve', self.endpoints['opencve'], params=params)
-                
-                if not response:
-                    break
-                    
-                data = response.json()
-                results = data.get('results', [])
-                
-                if not results:
-                    break
-                    
-                all_cves.extend(results)
-                
-                # Check if there's a next page
-                if not data.get('next'):
-                    break
-                    
-                page += 1
-                
-                # Limit the number of CVEs
-                if len(all_cves) >= limit:
-                    all_cves = all_cves[:limit]
-                    break
-            
-            # Get detailed information for each CVE
-            detailed_cves = []
-            for cve in all_cves[:10]:  # Limit detailed lookups to avoid rate limiting
-                cve_id = cve.get('cve_id')
-                if cve_id:
-                    detailed_url = f"{self.endpoints['opencve']}/{cve_id}"
-                    detailed_response = self._make_request('opencve', detailed_url)
-                    
-                    if detailed_response:
-                        detailed_cves.append(detailed_response.json())
-            
-            return {
-                'summary': all_cves,
-                'detailed': detailed_cves,
-                'count': len(all_cves),
-                'timestamp': datetime.now().isoformat()
-            }
-            
-        except requests.exceptions.RequestException as e:
-            logger.error(f"Error fetching OpenCVE data: {str(e)}")
-            return None
-
-    # Functions for disabled sources removed as per refactoring requirements
 
     def fetch_mitre_attack(self) -> Optional[Dict]:
         """Fetch MITRE ATT&CK framework data."""
@@ -476,12 +406,10 @@ def main():
     
     Working sources:
     - cve_data: CVE vulnerability data from NVD
-    - opencve_data: CVE vulnerability data from OpenCVE API
     - mitre_attack: MITRE ATT&CK framework data
     - capec_data: Common Attack Pattern Enumeration and Classification data
     - ubuntu_security: Ubuntu Security Notices
     - arxiv_papers: Recent cybersecurity papers from arXiv
-    - redhat_security: Red Hat Security Data
     - microsoft_security: Microsoft Security Updates
     - ctf_data: CTF event data and challenges
     
@@ -499,7 +427,6 @@ def main():
     # Define all available sources
     all_sources = {
         'cve_data': collector.fetch_cve_data,
-        'opencve_data': collector.fetch_opencve_data,
         'mitre_attack': collector.fetch_mitre_attack,
         'capec_data': collector.fetch_capec_data,
         'ubuntu_security': collector.fetch_ubuntu_security_notices,
