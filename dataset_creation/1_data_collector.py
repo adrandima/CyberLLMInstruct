@@ -80,7 +80,7 @@ class CyberDataCollector:
             # Security Advisories
             'microsoft_security': 'https://api.msrc.microsoft.com/cvrf/v2.0/updates',
             'ubuntu_usn': 'https://ubuntu.com/security/notices/rss.xml',
-            'redhat_security': 'https://access.redhat.com/labs/securitydataapi/cve.json',
+            #'redhat_security': 'https://access.redhat.com/labs/securitydataapi/cve.json',
             
             # Research and Reports
             'arxiv_cs_crypto': 'http://export.arxiv.org/api/query?search_query=cat:cs.CR&max_results=100',
