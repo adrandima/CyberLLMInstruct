@@ -504,7 +504,6 @@ def main():
         'capec_data': collector.fetch_capec_data,
         'ubuntu_security': collector.fetch_ubuntu_security_notices,
         'arxiv_papers': collector.fetch_arxiv_papers,
-        'redhat_security': collector.fetch_redhat_security,
         'microsoft_security': collector.fetch_microsoft_security,
         'ctf_data': collector.fetch_ctf_data,
     }
